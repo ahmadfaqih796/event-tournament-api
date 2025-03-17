@@ -17,11 +17,7 @@ class TeamController extends Controller
     public function index(Request $request)
     {
         $keyword = $request->input('search');
-        $user = Team::with(['leader'])
-            ->where('name', 'like', "%{$keyword}%")
-            ->orWhereHas('leader', function ($query) use ($keyword) {
-                $query->where('name', 'like', "%{$keyword}%");
-            })->get();
+        $user = Team::with(['createdBy'])->where('name', 'like', "%{$keyword}%")->get();
         return response()->json($user);
     }
 
@@ -42,7 +38,10 @@ class TeamController extends Controller
 
         $data = Team::create([
             'name' => $request->name,
-            'leader_id' => Auth::id(),
+            'game' => $request->game,
+            'leader_team' => $request->leader_team,
+            'member_team' => $request->member_team,
+            'created_by' => Auth::id()
         ]);
 
         return response()->json(['message' => 'Team created successfully', 'data' => $data], 201);
@@ -57,12 +56,14 @@ class TeamController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'leader_id' => 'required|integer',
         ]);
 
         $data->update([
             'name' => $request->name,
-            'leader_id' => $request->leader_id,
+            'game' => $request->game,
+            'leader_team' => $request->leader_team,
+            'member_team' => $request->member_team,
+            'created_by' => Auth::id()
         ]);
 
         return response()->json(['message' => 'Team updated successfully', 'data' => $data]);

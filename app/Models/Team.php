@@ -11,16 +11,14 @@ class Team extends Model
 
     protected $fillable = [
         'name',
-        'leader_id'
+        'game',
+        'leader_team',
+        'member_team',
+        'created_by'
     ];
 
-    public function leader()
+    public function createdBy()
     {
-        return $this->belongsTo(User::class, 'leader_id')->select('id', 'name');
-    }
-
-    public function members()
-    {
-        return $this->hasMany(TeamMember::class);
+        return $this->belongsToMany(User::class);
     }
 }

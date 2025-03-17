@@ -45,11 +45,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function accountGames()
-    {
-        return $this->hasMany(AccountGame::class, 'user_id')->with(['game'])->select('user_id', 'game_id','name', 'account');
-    }
-
     // public function teams()
     // {
     //     return $this->hasMany(Team::class, 'leader_id');
