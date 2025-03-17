@@ -70,6 +70,12 @@ class EventController extends Controller
         if (!$event) {
             return response()->json(['message' => 'Event not found'], 404);
         }
+        if ($event->is_approved === 1) {
+            return response()->json(['message' => 'Event already approved'], 400);
+        }
+        if ($event->is_approved === 0) {
+            return response()->json(['message' => 'Event already rejected'], 400);
+        }
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -85,6 +91,7 @@ class EventController extends Controller
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
             'location' => $request->location,
+            'is_approved' => $request->is_approved
         ]);
 
         return response()->json(['message' => 'Event updated successfully', 'event' => $event]);

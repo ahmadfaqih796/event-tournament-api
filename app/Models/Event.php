@@ -15,6 +15,7 @@ class Event extends Model
         'start_date',
         'end_date',
         'location',
+        'is_approved',
         'created_by'
     ];
 

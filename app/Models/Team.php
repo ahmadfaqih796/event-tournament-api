@@ -19,6 +19,6 @@ class Team extends Model
 
     public function createdBy()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsTo(User::class, 'created_by')->select('id', 'name');
     }
 }
