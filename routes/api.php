@@ -44,15 +44,8 @@ Route::controller(UserController::class)->middleware(['auth:sanctum'])->group(fu
     Route::delete('/users/{id}', 'destroy');
 });
 
-Route::controller(AccountGameController::class)->middleware(['auth:sanctum'])->group(function () {
-    Route::get('/account-game', 'index');
-Route::get('/account-game/{id}', 'show');
-    Route::post('/account-game', 'store');
-    Route::put('/account-game/{id}', 'update');
-    Route::delete('/account-game/{id}', 'destroy');
-});
-
 Route::get('/tournaments', [TournamentController::class, 'index']);
+Route::get('/open-tournaments', [TournamentController::class, 'openRegistration']);
 Route::get('/tournaments/{id}', [TournamentController::class, 'show']);
 Route::controller(TournamentController::class)->middleware(['auth:sanctum'])->group(function () {
     Route::post('/tournaments', 'store');
@@ -90,14 +83,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/teams', [TeamController::class, 'store']);
     Route::put('/teams/{id}', [TeamController::class, 'update']);
     Route::delete('/teams/{id}', [TeamController::class, 'destroy']);
-});
-
-Route::get('/team-members', [TeamMemberController::class, 'index']);
-Route::get('/team-members/{id}', [TeamMemberController::class, 'show']);
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/team-members', [TeamMemberController::class, 'store']);
-    Route::put('/team-members/{id}', [TeamMemberController::class, 'update']);
-    Route::delete('/team-members/{id}', [TeamMemberController::class, 'destroy']);
 });
 
 Route::get('/news', [NewsController::class, 'index']);

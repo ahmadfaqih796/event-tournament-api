@@ -10,13 +10,21 @@ class TournamentController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:sanctum')->except(['index', 'show']);
-        $this->middleware('can:authorization')->except(['index', 'show']);
+        $this->middleware('auth:sanctum')->except(['index', 'show', 'openRegistration']);
+        $this->middleware('can:authorization')->except(['index', 'show', 'openRegistration']);
     }
 
     public function index()
     {
         $data = Tournament::with('event')->get();
+        return response()->json($data);
+    }
+
+    public function openRegistration()
+    {
+        $data = Tournament::with('event')
+        ->whereDate('close_registration', '>=', now())
+        ->get();
         return response()->json($data);
     }
 
