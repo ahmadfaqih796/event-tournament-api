@@ -16,7 +16,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::with('accountGames')->get();
+        $users = User::get();
         return response()->json($users);
     }
 
@@ -27,6 +27,26 @@ class UserController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
         return response()->json($users);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $data = User::find($id);
+        if (!$data) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $data->update([
+            'name' => $request->name,
+            'role' => $request->role,
+            'is_active' => $request->is_active
+        ]);
+
+        return response()->json(['message' => 'User updated successfully', 'user' => $data]);
     }
 
     public function destroy($id)
