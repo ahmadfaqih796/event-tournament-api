@@ -91,13 +91,12 @@ class TournamentRegistrationController extends Controller
 
         if ($request->payment_status == 'paid') {
             $financial = Financial::where('tr_id', $data->id)->first();
-            if ($financial) {
+            if ($data->status == 'paid') {
                 throw new \Exception('Status already paid');
             }
-            Financial::update([
+            $financial->update([
                 'tr_id' => $data->id,
                 'paid_by' => $data->payBy->name,
-                'struk' => 'TR' . date('ymdHis') . $data->id,
                 'event_name' => $data->tournament->event->name,
                 'tournament_name' => $data->tournament->name,
                 'game_name' => $data->tournament->game,
