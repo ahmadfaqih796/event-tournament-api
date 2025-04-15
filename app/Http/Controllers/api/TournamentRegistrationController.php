@@ -55,6 +55,20 @@ class TournamentRegistrationController extends Controller
             'payment_proof' => $imagePath
         ]);
 
+        if ($request->payment_status == 'pending') {
+            Financial::create([
+                'tr_id' => $data->id,
+                'paid_by' => $data->payBy->name,
+                'struk' => 'TR' . date('ymdHis') . $data->id,
+                'event_name' => $data->tournament->event->name,
+                'tournament_name' => $data->tournament->name,
+                'game_name' => $data->tournament->game,
+                'team_name' => $data->team->name,
+                'price' => $data->tournament->price,
+                'pay' => $data->tournament->price,
+            ]);
+        }
+
         return response()->json($data, 201);
     }
 
@@ -80,7 +94,7 @@ class TournamentRegistrationController extends Controller
             if ($financial) {
                 throw new \Exception('Status already paid');
             }
-            Financial::create([
+            Financial::update([
                 'tr_id' => $data->id,
                 'paid_by' => $data->payBy->name,
                 'struk' => 'TR' . date('ymdHis') . $data->id,

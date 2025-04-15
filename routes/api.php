@@ -4,6 +4,7 @@ use App\Http\Controllers\api\AccountGameController;
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\api\DashboardController;
 use App\Http\Controllers\api\EventController;
+use App\Http\Controllers\api\FinancialController;
 use App\Http\Controllers\api\GameController;
 use App\Http\Controllers\api\NewsController;
 use App\Http\Controllers\api\TeamController;
@@ -92,6 +93,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/news/{id}', [NewsController::class, 'update']);
     Route::delete('/news/{id}', [NewsController::class, 'destroy']);
 });
+
+Route::get('/transactions', [FinancialController::class, 'index']);
+Route::get('/transactions/{id}', [FinancialController::class, 'show']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
