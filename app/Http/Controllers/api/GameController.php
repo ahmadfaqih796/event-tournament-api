@@ -38,6 +38,7 @@ class GameController extends Controller
 
         $data = Game::create([
             'name' => $request->name,
+            'link_image' => $request->link_image
         ]);
 
         return response()->json(['message' => 'Game created successfully', 'game' => $data], 201);
@@ -56,6 +57,7 @@ class GameController extends Controller
 
         $data->update([
             'name' => $request->name,
+            'link_image' => $request->link_image
         ]);
 
         return response()->json(['message' => 'Game updated successfully', 'game' => $data]);

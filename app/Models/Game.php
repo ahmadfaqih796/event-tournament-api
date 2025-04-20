@@ -12,5 +12,6 @@ class Game extends Model
     protected $fillable = [
         'id',
         'name',
+        'link_image'
     ];
 }
