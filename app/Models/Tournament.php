@@ -15,6 +15,7 @@ class Tournament extends Model
         'game',
         'is_paid',
         'price',
+        'barcode',
         'close_registration',
     ];
 

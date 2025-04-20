@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Tournament;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TournamentController extends Controller
 {
@@ -23,8 +24,8 @@ class TournamentController extends Controller
     public function openRegistration()
     {
         $data = Tournament::with('event')
-        ->whereDate('close_registration', '>=', now())
-        ->get();
+            ->whereDate('close_registration', '>=', now())
+            ->get();
         return response()->json($data);
     }
 
@@ -52,12 +53,18 @@ class TournamentController extends Controller
             ]
         );
 
+        $imagePath = null;
+        if ($request->hasFile('barcode')) {
+            $imagePath = $request->file('barcode')->store('barcodes', 'public');
+        }
+
         $data = Tournament::create([
             'name' => $request->name,
             'event_id' => $request->event_id,
             'game' => $request->game,
             'is_paid' => $request->is_paid,
             'price' => $request->price,
+            'barcode' => $imagePath,
             'close_registration' => $request->close_registration,
         ]);
 
@@ -80,6 +87,14 @@ class TournamentController extends Controller
             'close_registration'  => 'required|date',
         ]);
 
+        if ($request->hasFile('barcode')) {
+            if ($data->barcode) {
+                Storage::disk('public')->delete($data->barcode);
+            }
+            $imagePath = $request->file('barcode')->store('barcodes', 'public');
+            $data->update(['barcode' => $imagePath]);
+        }
+
         $data->update([
             'name' => $request->name,
             'event_id' => $request->event_id,
@@ -97,6 +112,10 @@ class TournamentController extends Controller
         $data = Tournament::find($id);
         if (!$data) {
             return response()->json(['message' => 'Tournament not found'], 404);
+        }
+
+        if ($data->barcode) {
+            Storage::disk('public')->delete($data->barcode);
         }
 
         $data->delete();

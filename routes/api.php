@@ -50,7 +50,7 @@ Route::get('/open-tournaments', [TournamentController::class, 'openRegistration'
 Route::get('/tournaments/{id}', [TournamentController::class, 'show']);
 Route::controller(TournamentController::class)->middleware(['auth:sanctum'])->group(function () {
     Route::post('/tournaments', 'store');
-    Route::put('/tournaments/{id}', 'update');
+    Route::post('/tournaments/{id}', 'update');
     Route::delete('/tournaments/{id}', 'destroy');
 });
 

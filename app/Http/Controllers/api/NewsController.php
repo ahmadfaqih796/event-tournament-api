@@ -98,8 +98,6 @@ class NewsController extends Controller
         }
 
         $this->authorize('delete', $news);
-
-        // Hapus gambar jika ada
         if ($news->image) {
             Storage::disk('public')->delete($news->image);
         }
